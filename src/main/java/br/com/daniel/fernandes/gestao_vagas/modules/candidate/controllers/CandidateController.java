@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.daniel.fernandes.gestao_vagas.modules.candidate.CandidateEntity;
+import br.com.daniel.fernandes.gestao_vagas.modules.candidate.dto.ProfileCandidateDTO;
 import br.com.daniel.fernandes.gestao_vagas.modules.candidate.useCases.CreateCandidateUseCase;
 import br.com.daniel.fernandes.gestao_vagas.modules.candidate.useCases.ListAllJobsUseCase;
 import br.com.daniel.fernandes.gestao_vagas.modules.candidate.useCases.ProfileCandidateUseCase;
@@ -58,6 +59,15 @@ public class CandidateController {
 
     @GetMapping("/")
     @PreAuthorize("hasRole('CANDIDATE')")
+    @Tag(name = "Candidato", description = "Informações do candidato")
+    @Operation(summary = "Perfil do candidato", description = "Essa função é responsável por buscar as  informações do perfil do candidato ")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", content = {
+            @Content(schema = @Schema(implementation = ProfileCandidateDTO.class))
+        }),
+        @ApiResponse(responseCode = "400", description = "User not found")
+    })
+    @SecurityRequirement(name = "jwt_auth")
     public ResponseEntity<Object> get(HttpServletRequest httpServletRequest) {
         var idCandidate = httpServletRequest.getAttribute("candidate_id");
        try {
@@ -79,7 +89,6 @@ public class CandidateController {
             )
         })
     })
-
     @SecurityRequirement(name = "jwt_auth")
     public List<JobEntity> findJobByFilter(@RequestParam String filter) {
         return this.listAllJobsUseCase.execute(filter);
