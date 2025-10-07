@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.validator.constraints.Length;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,6 +30,7 @@ public class CandidateEntity {
     @Email(message = "o campo [email] deve ser um email válido")
     private String email;
     @Length(min = 10, max = 100, message = "o campo [password] deve ter entre 10 e 100 caracteres")
+    @Schema(minLength = 10, maxLength = 100)
     private String password;
     private String description;
     private String curriculum;
